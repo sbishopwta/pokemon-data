@@ -1,0 +1,30 @@
+#sudo easy_install pip
+#sudo pip install BeautifulSoup4
+
+import urllib2
+import sys
+import os
+import os.path
+from bs4 import BeautifulSoup
+
+number_of_pokemon = 1
+
+base_url = "http://pokeapi.co/api/v2/pokemon/" #should append dexNumber for that Pokemon's info
+
+for dex_number in range(1, number_of_pokemon + 1): #The range() function only does numbers from the first to the last, not including the last. So it stops at two, not three in the above. This turns out to be the most common way to do this kind of loop.
+    url = base_url + str(dex_number)
+    print "Requesting Pokemon at dex number %s..." % dex_number
+
+    hdr = {'User-Agent': 'Mozilla/5.0'}
+    req = urllib2.Request(url, headers=hdr)
+    page = urllib2.urlopen(req)
+    soup = BeautifulSoup(page)
+
+    save_path = '/Users/stevenbishop/Documents/pokeApiOutput/'
+    name_of_file = str(dex_number)
+    complete_name = os.path.join(save_path, name_of_file+".json")
+    file1 = open(complete_name, "w")
+    toFile = str(soup)
+    file1.write(toFile)
+    file1.close()
+    print "Finished %s" % dex_number
